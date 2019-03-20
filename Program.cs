@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,7 @@ namespace GitChangeFIleExactor
                                     }
                                 }
                             }
+                            Process.Start(option.OutputDir);//自动打开资源管理器
                         }
                         else Console.WriteLine("输入有误");
                     }
