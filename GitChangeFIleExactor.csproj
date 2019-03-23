@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CAFB5BF4-961E-4F22-B0AF-38A59385AB3C}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GitChangeFIleExactor</RootNamespace>
-    <AssemblyName>GitChangeFIleExactor</AssemblyName>
+    <RootNamespace>GitChangeFileExactor</RootNamespace>
+    <AssemblyName>GitChangeFileExactor</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

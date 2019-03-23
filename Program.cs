@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CommandLine;
 using LibGit2Sharp;
 
-namespace GitChangeFIleExactor
+namespace GitChangeFileExactor
 {
     class Program
     {
@@ -29,7 +27,7 @@ namespace GitChangeFIleExactor
                                 waitCommits.Add(commit);
                             }
                         }
-                        var orderdWaitCommits= waitCommits.OrderBy(item => item.Committer.When).ToList();//按照提交时间升序，确保如果一个文件在多次commit中被修改，使用最后的版本
+                        var orderdWaitCommits = waitCommits.OrderBy(item => item.Committer.When).ToList();//按照提交时间升序，确保如果一个文件在多次commit中被修改，使用最后的版本
                         Console.WriteLine($"输入总 commitId数：{option.Commits.Count()}，实际发现数：{orderdWaitCommits.Count()}，详情如下（按时间升序），请确认是否继续(y/n)?");
                         orderdWaitCommits.ForEach(item =>
                         {
@@ -40,6 +38,7 @@ namespace GitChangeFIleExactor
                         {
                             Console.WriteLine();
                             Console.ForegroundColor = ConsoleColor.Red;
+                            option.AppendChanges("变更详情罗列如下：");
                             foreach (var commit in orderdWaitCommits)
                             {
                                 var parentCommit = commit.Parents.First();
@@ -52,7 +51,7 @@ namespace GitChangeFIleExactor
                                     if (outputPathDir != null && !Directory.Exists(outputPathDir)) Directory.CreateDirectory(outputPathDir);
                                     if (patch.Status != ChangeKind.Deleted)
                                     {
-                                        if(File.Exists(outputPath)) Console.WriteLine($"文件已存在，将被覆盖({outputPath})");
+                                        if (File.Exists(outputPath)) Console.WriteLine($"文件已存在，将被覆盖({outputPath})");
                                         File.Copy(realPath, outputPath, true);
                                         Console.WriteLine($"已拷贝变化文件({realPath})至({outputPath})");
                                     }
@@ -61,6 +60,8 @@ namespace GitChangeFIleExactor
                                         Console.WriteLine($"{patch.Path} 状态为已删除，自动跳过");
                                     }
                                 }
+                                option.AppendChanges($"[{commit.Id}]-{commit.Committer.When}，提交信息：");
+                                option.AppendChanges(commit.Message);
                             }
                             Process.Start(option.OutputDir);//自动打开资源管理器
                         }

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CommandLine;
 
-namespace GitChangeFIleExactor
+namespace GitChangeFileExactor
 {
     public class Options
     {
+        public const string ChangesFileName = "changes.txt";
+
         [Option('r', Required = true, HelpText = "仓库所在目录")]
         public string RepoDir { get; set; }
         [Option('c', Required = true, HelpText = "提交Id(8位)或Sha，支持多个值")]
@@ -34,7 +35,7 @@ namespace GitChangeFIleExactor
 
             if (string.IsNullOrEmpty(OutputDir))
             {
-                OutputDir = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-mm-dd HH fff"));
+                OutputDir = Path.Combine(Environment.CurrentDirectory, DateTime.Now.ToString("yyyy-MM-dd HH fff"));
             }
             if (Directory.Exists(OutputDir))
             {
@@ -43,6 +44,13 @@ namespace GitChangeFIleExactor
             else Directory.CreateDirectory(OutputDir);
             
             return true;
+        }
+
+        public void AppendChanges(string message)
+        {
+            if (string.IsNullOrEmpty(message)) return;
+            var logPath = Path.Combine(OutputDir, ChangesFileName);
+            File.AppendAllText(logPath,message,Encoding.UTF8);
         }
     }
 }
